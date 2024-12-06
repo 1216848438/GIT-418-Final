@@ -12,7 +12,7 @@ function fetchRaceData() {
     },
     error: function (xhr, status, error) {
         console.error("There was an error while fetching the race data: " + error);
-        raceCalendarSection.InnerHTML ="<p>Failure to load the race calendar. Please try again at a later time";
+        raceCalendarSection.innerHTML ="<p>Failure to load the race calendar. Please try again at a later time</p>";
     },
 });
 }
