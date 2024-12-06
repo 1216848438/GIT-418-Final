@@ -47,7 +47,7 @@ function loadCalendar(filterMonth = null) {
             <h3>${race.name}</h3>
             <p>Date: ${race.date}</p>
             <p>Location: ${race.location}</p>
-            <button class = "favorite-btn" data-name = "${race.name}">Add to Favorites</button>
+            <button class = "favorite-btn" data-name = "${race.name}" data-location = "${race.location}">Add to Favorites</button>
         `;
         raceCalendarDiv.appendChild(raceDiv);
     });
@@ -59,9 +59,12 @@ function loadCalendar(filterMonth = null) {
 
 function addToFavorites(event) {
     const raceName = event.target.getAttribute("data-name");
+    const raceLocation = event.target.getAttribute("date-location");
+
     let favorites =  JSON.parse(localStorage.getItem("favorites")) || [];
-        if(!favorites.includes(raceName)) {
-            favorites.push(raceName);
+
+        if (!favorites.some(fav => fav.name === raceName && fav.location === raceLocation)) {
+            favorites.push({name: raceName, location: raceLocation});
             localStorage.setItem("favorites", JSON.stringify(favorites));
             displayFavorites();
     }
@@ -73,7 +76,7 @@ function displayFavorites () {
     favorites.forEach((favorite) => {
         const favoriteDiv = document.createElement("div");
         favoriteDiv.className = "favorite";
-        favoriteDiv.textContent = favorite;
+        favoriteDiv.textContent = `${favorite.name} (${favorite.location})`;
         favoriteListDiv.appendChild(favoriteDiv);
     });
 }
@@ -97,3 +100,4 @@ applyFilterButton.addEventListener("click", () => {
     displayFavorites();
     initializeCarousel();
 });
+
