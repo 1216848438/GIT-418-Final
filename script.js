@@ -14,7 +14,7 @@ const raceData = [
 const raceCalendarDiv = document.getElementById("race-calendar");
 const favoriteListDiv = document.getElementById("favorite-list");
 const monthFilter = document.getElementById("month-filter");
-const applyFilterButton = document.getElementById("filter");
+const applyFilterButton = document.getElementById("apply-filter");
 
 function loadCalendar(filterMonth = null) {
     raceCalendarDiv.innerHTML = "";
