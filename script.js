@@ -1,12 +1,12 @@
 "use strict";
 
 const raceData = [
-    {name: "", date: "", location: ""},
-    {name: "", date: "", location: ""},
-    {name: "", date: "", location: ""},
-    {name: "", date: "", location: ""},
-    {name: "", date: "", location: ""},
-    {name: "", date: "", location: ""},
+    {name: "Race 1", date: "2024-03-17", location: "Australia"},
+    {name: "Race 2", date: "2024-04-07", location: "Bahrain"},
+    {name: "Race 3", date: "2024-05-12", location: "Spain"},
+    {name: "Race 4", date: "2024-06-23", location: "Canada"},
+    {name: "Race 5", date: "2024-07-14", location: "UK"},
+    {name: "Race 6", date: "2024-08-25", location: "Belgium"},
 ]
 
 const raceCalendarDiv = document.getElementById("race-calendar");
@@ -46,13 +46,13 @@ function addToFavorites(event) {
     let favorite =  JSON.parse(localStorage.getItem("favorites")) || [];
     if(!favorites.includes(raceName)) {
         favorites.push(raceName);
-        localStorage.setItem("favorites", JSON,stringify(favorites));
+        localStorage.setItem("favorites", JSON.stringify(favorites));
         displayFavorites();
     }
 }
 
 function displayFavorites () {
-    favoritesListDiv.innerHTML = "";
+    favoriteListDiv.innerHTML = "";
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     favorites.forEach((favorite) => {
         const favoriteDiv = document.createElement("div");
@@ -71,12 +71,12 @@ function initializeCarousel() {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 100,
+        autoplaySpeed: 3000,
     });
 }
 
 applyFilterButton.addEventListener("click", () => {
-    const selectedMonth = parseInt(monthFilter.val);
+    const selectedMonth = parseInt(monthFilter.value);
     loadCalendar();
     displayFavorites();
     initializeCarousel();

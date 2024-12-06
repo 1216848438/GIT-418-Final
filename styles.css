@@ -195,13 +195,8 @@ footer {
     font-size: .75rem;
     padding: 1rem;
     text-align: center;
-    background-color: #f4f4f4;
+    background-color: #c8102e;
     border-top: 1px solid #ddd;
-}
-
-footer a {
-    color: #c8102e;
-    font-weight: bold;
 }
 
 #saved-favorites {
