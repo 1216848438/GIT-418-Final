@@ -1,5 +1,5 @@
 const apiUrl = "https://ergast.com/api/f1/2024.json";
-const raceCalendarSection = document.getElementById("#race-calendar-section");
+const raceCalendarSection = document.getElementById("race-calendar-section");
 
 function fetchRaceData() {
     $.ajax({
@@ -8,11 +8,11 @@ function fetchRaceData() {
         dataType: "json",
         success: function(data) {
         const races = data.MRData.RaceTable.Races;
-        displaRaceCalendar(races);
+        displayRaceCalendar(races);
     },
     error: function (xhr, status, error) {
         console.error("There was an error while fetching the race data: " + error);
-        raceCalendarSection.html("<p>Failure to load the race calendar. Please try again at a later time");
+        raceCalendarSection.InnerHTML ="<p>Failure to load the race calendar. Please try again at a later time";
     },
 });
 }

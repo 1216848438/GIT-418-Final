@@ -28,6 +28,7 @@ function loadCalendar(filterMonth = null) {
     }
 
     filteredRaces.forEach((race) => {
+        const raceDiv = document.createElement("div");
         raceDiv.className = "race";
         raceDiv.innerHTML = `
             <h3>${race.name}</h3>
@@ -45,11 +46,11 @@ function loadCalendar(filterMonth = null) {
 
 function addToFavorites(event) {
     const raceName = event.target.getAttribute("data-name");
-    let favorite =  JSON.parse(localStorage.getItem("favorites")) || [];
-    if(!favorites.includes(raceName)) {
-        favorites.push(raceName);
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        displayFavorites();
+    let favorites =  JSON.parse(localStorage.getItem("favorites")) || [];
+        if(!favorites.includes(raceName)) {
+            favorites.push(raceName);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            displayFavorites();
     }
 }
 
@@ -79,7 +80,7 @@ function initializeCarousel() {
 
 applyFilterButton.addEventListener("click", () => {
     const selectedMonth = parseInt(monthFilter.value);
-    loadCalendar();
+    loadCalendar(selectedMonth);
     displayFavorites();
     initializeCarousel();
 });
