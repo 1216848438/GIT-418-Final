@@ -27,6 +27,19 @@ function loadCalendar(filterMonth = null) {
         });
     }
 
+    if (filteredRaces.length === 0) {
+        const message = document.createElement("p");
+        if(filterMonth < 2) {
+            message.textContent = "There is no Grand Prix this month. The season starts on March 17th, 2024."
+        } else if(filterMonth > 9) {
+            message.textContent = "No Grand Prix this month. The season ends on October 8, 2024.";
+        }else {
+            message.textContent = "No Grand Prix this month.";
+        }
+        raceCalendarDiv.appendChild(message);
+        return;
+    }
+
     filteredRaces.forEach((race) => {
         const raceDiv = document.createElement("div");
         raceDiv.className = "race";
