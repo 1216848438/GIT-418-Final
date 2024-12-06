@@ -197,6 +197,7 @@ footer {
     text-align: center;
     background-color: #c8102e;
     border-top: 1px solid #ddd;
+    margin-top: auto;
 }
 
 #saved-favorites {
