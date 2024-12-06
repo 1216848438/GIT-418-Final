@@ -59,7 +59,7 @@ function loadCalendar(filterMonth = null) {
 
 function addToFavorites(event) {
     const raceName = event.target.getAttribute("data-name");
-    const raceLocation = event.target.getAttribute("date-location");
+    const raceLocation = event.target.getAttribute("data-location");
 
     let favorites =  JSON.parse(localStorage.getItem("favorites")) || [];
 
@@ -70,16 +70,42 @@ function addToFavorites(event) {
     }
 }
 
+function removeFromFavorites(event) {
+    const raceName = event.target.getAttribute("data-name");
+    const raceLocation = event.target.getAttribute("data-location");
+
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    favorites = favorites.filter(
+        (fav) => fav.name !== raceName || fav.location !== raceLocation);
+
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    displayFavorites();
+}
+
 function displayFavorites () {
     favoriteListDiv.innerHTML = "";
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     favorites.forEach((favorite) => {
         const favoriteDiv = document.createElement("div");
         favoriteDiv.className = "favorite";
-        favoriteDiv.textContent = `${favorite.name} (${favorite.location})`;
+        
+        favoriteDiv.innerHTML = `
+        ${favorite.name} (${favorite.location})
+        <button class = "remove-btn" data-name = "${favorite.name}" data-location = "${favorite.location}">Remove</button>
+        `;
         favoriteListDiv.appendChild(favoriteDiv);
     });
+
+    document.querySelectorAll(".remove-btn").forEach((button) => {
+        button.addEventListener("click", removeFromFavorites);
+    });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    displayFavorites();
+    initializeCarousel();
+});
 
 //ADJUST CAROUSEL SETTINGS PER TESTING!!!!!
 function initializeCarousel() {
