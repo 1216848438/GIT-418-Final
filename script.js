@@ -7,6 +7,8 @@ const raceData = [
     {name: "Race 4", date: "2024-06-23", location: "Canada"},
     {name: "Race 5", date: "2024-07-14", location: "UK"},
     {name: "Race 6", date: "2024-08-25", location: "Belgium"},
+    {name: "Race 7", date: "2024-09-19", location: "UAE"},
+    {name: "Race 8", date: "2024-10-08", location: "USA"},
 ]
 
 const raceCalendarDiv = document.getElementById("race-calendar");
