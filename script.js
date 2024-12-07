@@ -64,3 +64,14 @@ function addFavorite(event) {
 }
 
 document.addEventListener("click", addFavorite);
+
+$(document).ready(function() {
+    $(`.race-carousel`).slick({
+        infinite: true,
+        slidesToShow: 1, 
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        dots: true
+    });
+});
