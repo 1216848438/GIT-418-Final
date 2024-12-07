@@ -1,31 +1,42 @@
 const apiUrl = "https://ergast.com/api/f1/2024.json";
 const raceCalendarSection = document.getElementById("race-calendar-section");
+const monthFilter = document.getElementById("month-filter");
+const applyFilterBtn = document.getElementById("apply-filter");
 
-function fetchRaceData() {
+function fetchRaceData(filterMonth = null) {
     $.ajax({
         url: apiUrl,
-        method: "GET",
+        method: "GET", 
         dataType: "json",
         success: function(data) {
-        const races = data.MRData.RaceTable.Races;
-        displayRaceCalendar(races);
-    },
-    error: function (xhr, status, error) {
-        console.error("There was an error while fetching the race data: " + error);
-        raceCalendarSection.innerHTML ="<p>Failure to load the race calendar. Please try again at a later time</p>";
-    },
-});
+            const races = data.MRData.RaceTable.Races;
+
+            const filteredRaces = filterMonth !== null ? filteredRacesByMonth(races, filterMonth) : races;
+            displayRaceCalendar(filteredRaces);
+        },
+        error: function(xhr, status, error) {
+            console.error("An error occured while fetching the race data: " + error);
+            raceCalendarSection.innerHTML = "<p>There was a failure to load the race calendar. Please try again later</p>";
+        },
+    });
+}
+
+function filterRacesByMonth(races, month) {
+    return races.filter(race => {
+        const raceMonth = new Date(race.date).getMonth();
+        return raceMonth === month;
+    });
 }
 
 function displayRaceCalendar(races) {
-    const raceList = $("<div>").addClass("race-list");
+    const raceList = $("div").addClass("race-list");
 
     if(races.length === 0) {
-        raceList.html("<p>No races are available for the current selected season.</p>");
+        raceList.html("<p>No races available for the season you've selected.</p>");
     } else {
         races.forEach((race) => {
-            const raceCard = $("<div>").addClass("race");
-            raceCard.html(` 
+            const raceCard = $("div>").addClass("race");
+            raceCard.html(`
                 <h3>${race.raceName}</h3>
                 <p><strong>Date:</strong> ${race.date}</p>
                 <p><strong>Location:</strong> ${race.Circuit.circuitName}</p>
@@ -37,7 +48,7 @@ function displayRaceCalendar(races) {
     }
     raceCalendarSection.append(raceList);
 
-    $(".favorite-btn").on("click", function() {
+    $(".favorite-btn").on("click", function () {
         const raceName = $(this).data("race");
         saveToFavorites(raceName);
     });
@@ -54,4 +65,12 @@ function saveToFavorites (race) {
     }
 }
 
-$(document).ready(fetchRaceData);
+$(document).ready(() => {
+    fetchRaceData();
+
+    applyFilterBtn.addEventListener("click", function () {
+        const selectedMonth = parseInt(monthFilter.value);
+        fetchRaceData(selectedMonth);
+    });
+});
+
