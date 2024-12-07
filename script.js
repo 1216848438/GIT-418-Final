@@ -1,77 +1,129 @@
+"use strict";
+
+const raceData = [
+    {name: "Race 1", date: "2024-03-17", location: "Australia"},
+    {name: "Race 2", date: "2024-04-07", location: "Bahrain"},
+    {name: "Race 3", date: "2024-05-12", location: "Spain"},
+    {name: "Race 4", date: "2024-06-23", location: "Canada"},
+    {name: "Race 5", date: "2024-07-14", location: "UK"},
+    {name: "Race 6", date: "2024-08-25", location: "Belgium"},
+    {name: "Race 7", date: "2024-09-19", location: "UAE"},
+    {name: "Race 8", date: "2024-10-08", location: "USA"},
+]
+
 const raceCalendarDiv = document.getElementById("race-calendar");
+const favoriteListDiv = document.getElementById("favorite-list");
+const monthFilter = document.getElementById("month-filter");
+const applyFilterButton = document.getElementById("apply-filter");
 
 function loadCalendar(filterMonth = null) {
     raceCalendarDiv.innerHTML = "";
+    let filteredRaces = raceData;
 
-    $.ajax({
-        url: "http://api.jolpi.ca/ergast/f1/2024/races.json",
-        method: "GET",
-        dataType: "json",
-        success: function (response) {
-            const raceData = response.MRData.RaceTable.Races;
-            let filteredRaces = raceData;
+    if(filterMonth !== null) {
+        filteredRaces = raceData.filter((race) => {
+            const raceMonth = new Date(race.date).getMonth();
+            return raceMonth === filterMonth;
+        });
+    }
 
-            if(filterMonth !== null) {
-                filteredRaces = raceData.filter((race) =>{
-                    const raceMonth = new Date(race.data).getMonth();
-                    return raceMonth === filterMonth;
-                });
-            }
-
-            if(filteredRaces.length === 0) {
-                const message = document.createElement("p");
-                message.textContent = "No Grand Prix this month.";
-                raceCalendarDiv.appendChild(message);
-                return;
-            }
-
-            filteredRaces.forEach((race) => {
-                const raceDiv = document.createElement("div");
-                raceDiv.className = "race";
-                raceDiv.innerHTML = `
-                    <h3>${race.raceName}</h3>
-                    <p>Date: ${race.data}</p>
-                    <p>Location: ${race.Circuit.Location.locality}, ${race.Circuit.Location.country}</p>
-                    <button class="favorite-btn" data-name="${race.raceName}" data-location="${race.Circuit.Location.locality}">Add to Favorites</button>
-                    `;
-                    raceCalendarDiv.appendChild(raceDiv);
-            });
-        },
-        error: function() {
-            const errorMessage = document.createElement("p");
-            errorMessage.textContent = "Race Data has failed to load.";
-            raceCalendarDiv.appendChild(errorMessage);
+    if (filteredRaces.length === 0) {
+        const message = document.createElement("p");
+        if(filterMonth < 2) {
+            message.textContent = "There is no Grand Prix this month. The season starts on March 17th, 2024."
+        } else if(filterMonth > 9) {
+            message.textContent = "No Grand Prix this month. The season ends on October 8, 2024.";
+        }else {
+            message.textContent = "No Grand Prix this month.";
         }
+        raceCalendarDiv.appendChild(message);
+        return;
+    }
+
+    filteredRaces.forEach((race) => {
+        const raceDiv = document.createElement("div");
+        raceDiv.className = "race";
+        raceDiv.innerHTML = 
+            <h3>${race.name}</h3>
+            <p>Date: ${race.date}</p>
+            <p>Location: ${race.location}</p>
+            <button class = "favorite-btn" data-name = "${race.name}" data-location = "${race.location}">Add to Favorites</button>
+        ;
+        raceCalendarDiv.appendChild(raceDiv);
+    });
+
+    document.querySelectorAll(".favorite-btn").forEach((button) => {
+        button.addEventListener("click", addToFavorites);
     });
 }
 
-document.addEventListener("DOMContentLoaded", loadCalendar);
+function addToFavorites(event) {
+    const raceName = event.target.getAttribute("data-name");
+    const raceLocation = event.target.getAttribute("data-location");
 
-function addFavorite(event) {
-    const target = event.target;
-    if(target.classList.contains("favorite-btn")) {
-        const raceName = target.getAttribute("data-name");
-        const raceLocation = target.getAttribute("data-location");
+    let favorites =  JSON.parse(localStorage.getItem("favorites")) || [];
 
-        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-        favorites.push({raceName, raceLocation});
-        
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-
-        alert(`You've added ${raceName} in ${raceLocation} to your favorites!`);
+        if (!favorites.some(fav => fav.name === raceName && fav.location === raceLocation)) {
+            favorites.push({name: raceName, location: raceLocation});
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            displayFavorites();
     }
 }
 
-document.addEventListener("click", addFavorite);
+function removeFromFavorites(event) {
+    const raceName = event.target.getAttribute("data-name");
+    const raceLocation = event.target.getAttribute("data-location");
 
-$(document).ready(function() {
-    $(`.race-carousel`).slick({
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    favorites = favorites.filter(
+        (fav) => fav.name !== raceName || fav.location !== raceLocation);
+
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    displayFavorites();
+}
+
+function displayFavorites () {
+    favoriteListDiv.innerHTML = "";
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    favorites.forEach((favorite) => {
+        const favoriteDiv = document.createElement("div");
+        favoriteDiv.className = "favorite";
+        
+        favoriteDiv.innerHTML = 
+        ${favorite.name} (${favorite.location})
+        <button class = "remove-btn" data-name = "${favorite.name}" data-location = "${favorite.location}">Remove</button>
+        ;
+        favoriteListDiv.appendChild(favoriteDiv);
+    });
+
+    document.querySelectorAll(".remove-btn").forEach((button) => {
+        button.addEventListener("click", removeFromFavorites);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    displayFavorites();
+    initializeCarousel();
+});
+
+//ADJUST CAROUSEL SETTINGS PER TESTING!!!!!
+function initializeCarousel() {
+    $(".race-carousel").slick({
+        dots: true, 
         infinite: true,
-        slidesToShow: 1, 
+        speed: 250,
+        slidesToShow: 1,
+        slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
-        arrows: true,
-        dots: true
     });
+}
+
+applyFilterButton.addEventListener("click", () => {
+    const selectedMonth = parseInt(monthFilter.value);
+    loadCalendar(selectedMonth);
+    displayFavorites();
+    initializeCarousel();
 });
+
