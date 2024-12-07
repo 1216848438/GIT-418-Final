@@ -114,7 +114,7 @@ function initializeCarousel() {
 }
 
 applyFilterButton.addEventListener("click", () => {
-    const selectedMonth = parseInt(monthFilter.value);
+    const selectedMonth = parseInt(monthFilter.value) - 1;
     loadCalendar(selectedMonth);
     displayFavorites();
     initializeCarousel();
