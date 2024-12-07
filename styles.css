@@ -172,23 +172,114 @@ main {
     background-color: #a00d23;
 }
 
-#carousel-section {
-    margin: 2rem 0;
+.race-carousel {
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 0;
+    position: relative;
+}
+
+.race-carousel .carousel-item {
+    position: relative;
     text-align: center;
     overflow: hidden;
 }
 
-.slick-slide img {
-    display: block;
-    margin: 0 auto;
-}
-
 .race-carousel img {
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.race-carousel .carousel-item:hover img {
+    transform: scale(1.1);
+}
+
+.race-carousel .race-heading {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 12px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.slick-prev,
+.slick-next {
+    font-size: 40px;
+    color: #fff;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slick-prev {
+    left: 10px;
+}
+
+.slick-next {
+    right: 10px;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    color: #007bff;
+}
+
+.slick-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.slick-dots li button {
+    font-size: 0;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.slick-dots li.slick-active button {
+    color: #007bff;
+}
+
+.slick-dots li button:before {
+    content: '•';
+    font-size: 20px;
+    color: #ccc;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #007bff;
+}
+
+.slick-prev, .slick-next {
+    transition: transform 0.3s ease-in-out;
+}
+
+.slick-prev:hover, .slick-next:hover {
+    transform: translateY(-50%) scale(1.1);
 }
 
 footer {
