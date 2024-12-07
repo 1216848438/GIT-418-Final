@@ -43,12 +43,12 @@ function loadCalendar(filterMonth = null) {
     filteredRaces.forEach((race) => {
         const raceDiv = document.createElement("div");
         raceDiv.className = "race";
-        raceDiv.innerHTML = 
+        raceDiv.innerHTML = `
             <h3>${race.name}</h3>
             <p>Date: ${race.date}</p>
             <p>Location: ${race.location}</p>
             <button class = "favorite-btn" data-name = "${race.name}" data-location = "${race.location}">Add to Favorites</button>
-        ;
+        `;
         raceCalendarDiv.appendChild(raceDiv);
     });
 
@@ -90,10 +90,10 @@ function displayFavorites () {
         const favoriteDiv = document.createElement("div");
         favoriteDiv.className = "favorite";
         
-        favoriteDiv.innerHTML = 
+        favoriteDiv.innerHTML = `
         ${favorite.name} (${favorite.location})
         <button class = "remove-btn" data-name = "${favorite.name}" data-location = "${favorite.location}">Remove</button>
-        ;
+        `;
         favoriteListDiv.appendChild(favoriteDiv);
     });
 
