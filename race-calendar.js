@@ -11,7 +11,7 @@ function fetchRaceData(filterMonth = null) {
         success: function(data) {
             const races = data.MRData.RaceTable.Races;
 
-            const filteredRaces = filterMonth !== null ? filteredRacesByMonth(races, filterMonth) : races;
+            const filteredRaces = filterMonth !== null ? filterRacesByMonth(races, filterMonth) : races;
             displayRaceCalendar(filteredRaces);
         },
         error: function(xhr, status, error) {
@@ -29,13 +29,13 @@ function filterRacesByMonth(races, month) {
 }
 
 function displayRaceCalendar(races) {
-    const raceList = $("div").addClass("race-list");
+    const raceList = $("<div>").addClass("race-list");
 
     if(races.length === 0) {
         raceList.html("<p>No races available for the season you've selected.</p>");
     } else {
         races.forEach((race) => {
-            const raceCard = $("div>").addClass("race");
+            const raceCard = $("<div>").addClass("race");
             raceCard.html(`
                 <h3>${race.raceName}</h3>
                 <p><strong>Date:</strong> ${race.date}</p>
